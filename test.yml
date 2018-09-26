@@ -8,9 +8,12 @@
       rsync_proxy: "{{ lookup('env', 'rsync_proxy') }}"
   tasks:
     - name: Install nginx
-      apt:
-        name: nginx
+      package:
+        name: "{{ item }}"
         state: present
+      with_items:
+        - epel-release
+        - nginx
     - name: Example index page
       copy:
         content: 'Generic example'
