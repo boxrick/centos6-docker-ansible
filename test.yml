@@ -1,0 +1,22 @@
+---
+- hosts: all
+  gather_facts: false
+  vars:
+    proxy_env:
+      http_proxy: "{{ lookup('env', 'http_proxy') }}"
+      https_proxy: "{{ lookup('env', 'https_proxy') }}"
+      rsync_proxy: "{{ lookup('env', 'rsync_proxy') }}"
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+    - name: Example index page
+      copy:
+        content: 'Generic example'
+        dest: /usr/share/nginx/html/index.html
+    - name: Start service
+      service:
+        name: nginx
+        state: started
+  environment: "{{ proxy_env }}"
